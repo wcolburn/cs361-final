@@ -115,9 +115,7 @@ class World
     @features.append(f)
   end
 
-  def to_geojson(indent=0)
-    # TODO REMOVE
-    json = GIS_JSON.new
+  def to_geojson(json)
     # Write stuff
     s = '{"type": "FeatureCollection","features": ['
     @features.each_with_index do |f,i|
@@ -154,8 +152,8 @@ def main()
   t2 = Track.new(segments: [ts3], name: "track 2")
 
   world = World.new(name: "My Data", things: [w, w2, t, t2])
-
-  puts world.to_geojson
+  j = GIS_JSON.new
+  puts world.to_geojson(j)
 end
 
 if File.identical?(__FILE__, $0)

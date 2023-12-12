@@ -70,9 +70,10 @@ class TestGis < Test::Unit::TestCase
     t2 = Track.new(segments: [ts3], name: "track 2")
 
     w = World.new(name: "My Data", things: [w, w2, t, t2])
+    j = GIS_JSON.new
 
     expected = JSON.parse('{"type": "FeatureCollection","features": [{"type": "Feature","properties": {"title": "home","icon": "flag"},"geometry": {"type": "Point","coordinates": [-121.5,45.5,30]}},{"type": "Feature","properties": {"title": "store","icon": "dot"},"geometry": {"type": "Point","coordinates": [-121.5,45.6]}},{"type": "Feature", "properties": {"title": "track 1"},"geometry": {"type": "MultiLineString","coordinates": [[[-122,45],[-122,46],[-121,46]],[[-121,45],[-121,46]]]}},{"type": "Feature", "properties": {"title": "track 2"},"geometry": {"type": "MultiLineString","coordinates": [[[-121,45.5],[-122,45.5]]]}}]}')
-    result = JSON.parse(w.to_geojson)
+    result = JSON.parse(w.to_geojson(j))
     assert_equal(expected, result)
   end
 
