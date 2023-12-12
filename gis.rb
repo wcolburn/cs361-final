@@ -63,15 +63,14 @@ class GIS_JSON
       end
       j += '}'
     end
-    j += "}"
-    return j
+    j + "}"
   end
 
 end
 
 class Track
   attr_reader :name, :segments
-  def initialize(segments, name=nil)
+  def initialize(segments:, name:nil)
     @name = name
     @segments = segments
   end
@@ -84,16 +83,17 @@ end
 
 class Point
   attr_reader :lat, :lon, :ele
-  def initialize(lon, lat, ele=nil)
+  def initialize(lon:, lat:, ele:nil)
     @lon = lon
     @lat = lat
     @ele = ele
   end
 end
 
+
 class Waypoint
   attr_reader :lat, :lon, :ele, :name, :type
-  def initialize(lon, lat, ele=nil, name=nil, type=nil)
+  def initialize(lon:, lat:, ele:nil, name:nil, type:nil)
     @lat = lat
     @lon = lon
     @ele = ele
@@ -108,13 +108,13 @@ end
 
 
 class World
-  def initialize(name, things)
+  def initialize(name:, things:)
     @name = name
     @features = things
   end
 
   def add_feature(f)
-    @features.append(t)
+    @features.append(f)
   end
 
   def to_geojson(indent=0)
@@ -133,29 +133,29 @@ class World
 end
 
 def main()
-  w = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
-  w2 = Waypoint.new(-121.5, 45.6, nil, "store", "dot")
+  w = Waypoint.new(lon: -121.5, lat: 45.5, ele: 30, name: "home", type: "flag")
+  w2 = Waypoint.new(lon: -121.5, lat: 45.6, ele: nil, name: "store", type: "dot")
 
   ts1 = [
-    Point.new(-122, 45),
-    Point.new(-122, 46),
-    Point.new(-121, 46),
+    Point.new(lon: -122, lat: 45),
+    Point.new(lon: -122, lat: 46),
+    Point.new(lon: -121, lat: 46),
   ]
 
   ts2 = [
-    Point.new(-121, 45),
-    Point.new(-121, 46),
+    Point.new(lon: -121, lat: 45),
+    Point.new(lon: -121, lat: 46),
   ]
 
   ts3 = [
-    Point.new(-121, 45.5),
-    Point.new(-122, 45.5),
+    Point.new(lon: -121, lat: 45.5),
+    Point.new(lon: -122, lat: 45.5),
   ]
 
-  t = Track.new([ts1, ts2], "track 1")
-  t2 = Track.new([ts3], "track 2")
+  t = Track.new(segments: [ts1, ts2], name: "track 1")
+  t2 = Track.new(segments: [ts3], name: "track 2")
 
-  world = World.new("My Data", [w, w2, t, t2])
+  world = World.new(name: "My Data", things: [w, w2, t, t2])
 
   puts world.to_geojson
 end
