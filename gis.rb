@@ -12,11 +12,10 @@ class Json
 end
 
 class Track
+  attr_reader :name, :segments
   def initialize(segments, name=nil)
     @name = name
-    segment_objects = segments
-    # set segments to segment_objects
-    @segments = segment_objects
+    @segments = segments
   end
 
   def get_json
