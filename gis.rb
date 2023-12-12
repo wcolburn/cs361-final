@@ -14,10 +14,7 @@ end
 class Track
   def initialize(segments, name=nil)
     @name = name
-    segment_objects = []
-    segments.each do |s|
-      segment_objects.append(TrackSegment.new(s))
-    end
+    segment_objects = segments
     # set segments to segment_objects
     @segments = segment_objects
   end
@@ -41,7 +38,7 @@ class Track
       j += '['
       # Loop through all the coordinates in the segment
       tsj = ''
-      s.coordinates.each do |c|
+      s.each do |c|
         if tsj != ''
           tsj += ','
         end
@@ -57,14 +54,6 @@ class Track
       j+=']'
     end
     j + ']}}'
-  end
-end
-
-
-class TrackSegment
-  attr_reader :coordinates
-  def initialize(coordinates)
-    @coordinates = coordinates
   end
 end
 
