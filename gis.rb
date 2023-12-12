@@ -1,5 +1,13 @@
 #!/usr/bin/env ruby
 
+class JSON
+  def initialize
+    super
+  end
+
+
+end
+
 class Track
   def initialize(segments, name=nil)
     @name = name
@@ -11,7 +19,7 @@ class Track
     @segments = segment_objects
   end
 
-  def get_track_json()
+  def get_json
     j = '{'
     j += '"type": "Feature", '
     if @name != nil
@@ -48,6 +56,8 @@ class Track
     j + ']}}'
   end
 end
+
+
 class TrackSegment
   attr_reader :coordinates
   def initialize(coordinates)
@@ -55,10 +65,9 @@ class TrackSegment
   end
 end
 
+
 class Point
-
   attr_reader :lat, :lon, :ele
-
   def initialize(lon, lat, ele=nil)
     @lon = lon
     @lat = lat
@@ -67,11 +76,7 @@ class Point
 end
 
 class Waypoint
-
-
-
-attr_reader :lat, :lon, :ele, :name, :type
-
+  attr_reader :lat, :lon, :ele, :name, :type
   def initialize(lon, lat, ele=nil, name=nil, type=nil)
     @lat = lat
     @lon = lon
@@ -80,9 +85,8 @@ attr_reader :lat, :lon, :ele, :name, :type
     @type = type
   end
 
-  def get_waypoint_json(indent=0)
+  def get_json(indent=0)
     j = '{"type": "Feature",'
-    # if name is not nil or type is not nil
     j += '"geometry": {"type": "Point","coordinates": '
     j += "[#{@lon},#{@lat}"
     if ele != nil
@@ -107,11 +111,13 @@ attr_reader :lat, :lon, :ele, :name, :type
   end
 end
 
+
 class World
-def initialize(name, things)
-  @name = name
-  @features = things
-end
+  def initialize(name, things)
+    @name = name
+    @features = things
+  end
+
   def add_feature(f)
     @features.append(t)
   end
@@ -123,11 +129,7 @@ end
       if i != 0
         s +=","
       end
-        if f.class == Track
-            s += f.get_track_json
-        elsif f.class == Waypoint
-            s += f.get_waypoint_json
-      end
+      s += f.get_json
     end
     s + "]}"
   end
@@ -136,13 +138,17 @@ end
 def main()
   w = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
   w2 = Waypoint.new(-121.5, 45.6, nil, "store", "dot")
+
   ts1 = [
-  Point.new(-122, 45),
-  Point.new(-122, 46),
-  Point.new(-121, 46),
+    Point.new(-122, 45),
+    Point.new(-122, 46),
+    Point.new(-121, 46),
   ]
 
-  ts2 = [ Point.new(-121, 45), Point.new(-121, 46), ]
+  ts2 = [
+    Point.new(-121, 45),
+    Point.new(-121, 46),
+  ]
 
   ts3 = [
     Point.new(-121, 45.5),
@@ -154,10 +160,10 @@ def main()
 
   world = World.new("My Data", [w, w2, t, t2])
 
-  puts world.to_geojson()
+  puts world.to_geojson
 end
 
 if File.identical?(__FILE__, $0)
-  main()
+  main
 end
 
