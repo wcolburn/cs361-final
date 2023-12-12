@@ -42,6 +42,31 @@ class GIS_JSON
     j + ']}}'
   end
 
+  def get_waypoint_json(lon, lat, ele, name, type)
+    j = '{"type": "Feature",'
+    j += '"geometry": {"type": "Point","coordinates": '
+    j += "[#{lon},#{lat}"
+    if ele != nil
+      j += ",#{ele}"
+    end
+    j += ']},'
+    if name != nil or type != nil
+      j += '"properties": {'
+      if name != nil
+        j += '"title": "' + name + '"'
+      end
+      if type != nil  # if type is not nil
+        if name != nil
+          j += ','
+        end
+        j += '"icon": "' + type + '"'  # type is the icon
+      end
+      j += '}'
+    end
+    j += "}"
+    return j
+  end
+
 end
 
 class Track
@@ -77,28 +102,7 @@ class Waypoint
   end
 
   def get_json(json)
-    j = '{"type": "Feature",'
-    j += '"geometry": {"type": "Point","coordinates": '
-    j += "[#{@lon},#{@lat}"
-    if ele != nil
-      j += ",#{@ele}"
-    end
-    j += ']},'
-    if name != nil or type != nil
-      j += '"properties": {'
-      if name != nil
-        j += '"title": "' + @name + '"'
-      end
-      if type != nil  # if type is not nil
-        if name != nil
-          j += ','
-        end
-        j += '"icon": "' + @type + '"'  # type is the icon
-      end
-      j += '}'
-    end
-    j += "}"
-    return j
+    json.get_waypoint_json(@lon, @lat, @ele, @name, @type)
   end
 end
 
