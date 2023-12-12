@@ -1,36 +1,23 @@
 #!/usr/bin/env ruby
 
-class Json
+class GIS_JSON
   def initialize
     super
   end
 
-  def create_track_json
-
-  end
-
-end
-
-class Track
-  attr_reader :name, :segments
-  def initialize(segments, name=nil)
-    @name = name
-    @segments = segments
-  end
-
-  def get_json
+  def get_track_json(name, segments)
     j = '{'
     j += '"type": "Feature", '
-    if @name != nil
+    if name != nil
       j+= '"properties": {'
-      j += '"title": "' + @name + '"'
+      j += '"title": "' + name + '"'
       j += '},'
     end
     j += '"geometry": {'
     j += '"type": "MultiLineString",'
     j +='"coordinates": ['
     # Loop through all the segment objects
-    @segments.each_with_index do |s, index|
+    segments.each_with_index do |s, index|
       if index > 0
         j += ","
       end
@@ -54,6 +41,19 @@ class Track
     end
     j + ']}}'
   end
+
+end
+
+class Track
+  attr_reader :name, :segments
+  def initialize(segments, name=nil)
+    @name = name
+    @segments = segments
+  end
+
+  def get_json(json)
+    json.get_track_json(name, segments)
+  end
 end
 
 
@@ -76,7 +76,7 @@ class Waypoint
     @type = type
   end
 
-  def get_json(indent=0)
+  def get_json(json)
     j = '{"type": "Feature",'
     j += '"geometry": {"type": "Point","coordinates": '
     j += "[#{@lon},#{@lat}"
@@ -114,13 +114,15 @@ class World
   end
 
   def to_geojson(indent=0)
+    # TODO REMOVE
+    json = GIS_JSON.new
     # Write stuff
     s = '{"type": "FeatureCollection","features": ['
     @features.each_with_index do |f,i|
       if i != 0
         s +=","
       end
-      s += f.get_json
+      s += f.get_json(json)
     end
     s + "]}"
   end
