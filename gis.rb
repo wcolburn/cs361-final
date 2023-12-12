@@ -91,12 +91,10 @@ class Point
 end
 
 
-class Waypoint
-  attr_reader :lat, :lon, :ele, :name, :type
+class Waypoint < Point
+  attr_reader :name, :type
   def initialize(lon:, lat:, ele:nil, name:nil, type:nil)
-    @lat = lat
-    @lon = lon
-    @ele = ele
+    super(lon:lon, lat:lat, ele:ele)
     @name = name
     @type = type
   end
