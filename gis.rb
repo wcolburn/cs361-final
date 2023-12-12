@@ -1,10 +1,13 @@
 #!/usr/bin/env ruby
 
-class JSON
+class Json
   def initialize
     super
   end
 
+  def create_track_json
+
+  end
 
 end
 
