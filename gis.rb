@@ -69,7 +69,7 @@ class GIS_JSON
 end
 
 class Track
-  attr_reader :name, :segments
+  attr_reader :segments, :name
   def initialize(segments:, name:nil)
     @name = name
     @segments = segments
@@ -100,7 +100,7 @@ class Waypoint < Point
   end
 
   def get_json(json)
-    json.get_waypoint_json(@lon, @lat, @ele, @name, @type)
+    json.get_waypoint_json(lon, lat, ele, name, type)
   end
 end
 
